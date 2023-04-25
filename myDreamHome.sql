@@ -2,14 +2,13 @@ show databases;
 create database DreamHome;
 use DreamHome;
 show tables;
-drop table staff;
+
 create table Staff(
 					StaffId int UNIQUE not NULL,
 					StaffFName varchar(15),
 					StaffMName varchar(15),
                     StaffLName varchar(15),
                     Sex char(1),
-                    
                     Position char(1), -- this can be 'a'(assistant), 's'(supervisor) and 'm'(manager)--
                     Salary int,
                     BranchId int,
@@ -33,7 +32,7 @@ create table Branch(
                     state varchar(20),
                     country varchar(20) -- the last four attributes combine to form address
 					);
-drop table Branchtelephone;
+
 create table BranchTelephone(
 							BranchId int Not Null,
                             BranchNumber char(10)
@@ -152,6 +151,154 @@ INSERT INTO `dreamhome`.`propertyview` (`propertyid`, `clientid`, `DateofVisit`,
 INSERT INTO `dreamhome`.`propertyview` (`propertyid`, `clientid`, `DateofVisit`, `comments`) VALUES ('4', '2', '2023-03-02', 'Liked the place and want to bid on it');
 -- insreting into clientTelephon
 insert into clienttelephone values( 2, '9113087595'), (2, '8989898989'), (4, '2342342344'),(4, '2345623456');
+
+
+-- Creation of all primary keys
+Alter table Staff
+add constraint pk_staff 
+Primary key Staff(StaffId);
+
+Alter table Branch
+Add constraint pk_branch
+primary key Branch(BranchId);
+
+Alter Table client
+Add constraint pk_client
+primary key client(clientId);
+
+Alter table StaffTelephone
+Add constraint pk_StaffTelephone
+primary key StaffTelephone(StaffId, StaffNumber);
+
+
+Alter table Owner
+Add constraint pk_owner
+primary key Owner(OwnerId);
+
+Alter table Registration
+Add constraint pk_registration
+primary key Registration(clientId);
+
+
+Alter table BranchTelephone
+Add constraint pk_BranchTelephone
+primary key BranchId(BranchId, branchNumber);
+
+Alter table ClientTelephone
+Add constraint pk_StaffTelephone
+primary key clientTelephone(clientId,clientNumber);
+
+Alter table OwnerTelephone
+Add constraint pk_OwneTelephone
+primary key OwnerTelephone(OwnerId, OwnerNumber);
+
+Alter table Properties
+Add constraint pk_properties
+primary key properties(PropertyId);
+
+Alter table LeaseAgreement
+Add constraint pk_leaseAgreement
+primary key LeaseAgreement(LeaseId);
+
+Alter table PropertyView
+Add constraint pk_propertyView
+primary key propertyView(propertyId, ClientId, DateOfVisit);
+
+-- done with adding primary keys:
+
+
+-- code for adding foreign key constraints
+Alter table LeaseAgreement
+Add constraint fk_propertyId
+foreign key LeaseAgreement(PropertyId)
+references Properties(propertyId);
+
+
+Alter table LeaseAgreement
+Add constraint fk_clientid
+foreign key LeaseAgreement(clientid)
+references client(clientid);
+
+
+Alter table properties
+Add constraint fk_ownerid
+foreign key properties(ownerid)
+references owner(ownerid);
+
+
+Alter table properties
+Add constraint fk_managingstaffid
+foreign key properties(managingstaffid)
+references Staff(StaffId);
+
+Alter table propertyview
+Add constraint fk_propertyviewpropertyId
+foreign key propertyview(propertyId)
+references properties(propertyid);
+
+Alter table propertyview
+Add constraint fk_propertviewclientid
+foreign key propertyview(clientid)
+references client(clientid);
+
+Alter table OwnerTelephone
+Add constraint fk_Ownertelephone
+foreign key OwnerTelephone(ownerid)
+references owner(ownerid);
+
+Alter table Registration
+Add constraint fk_registrationclientId
+foreign key registration(clientid)
+references client(clientid);
+
+Alter table Registration
+Add constraint fk_registrationBranchId
+foreign key registration(Branchid)
+references branch(branchid);
+
+Alter table Registration
+Add constraint fk_registrationclientId
+foreign key registration(clientid)
+references client(clientid);
+
+Alter table Registration
+Add constraint fk_registrationstaffid
+foreign key registration(staffid)
+references staff(staffid);
+
+Alter table branchtelephone
+Add constraint fk_branchtelephoneBranchId
+foreign key branchtelephone(branchid)
+references branch(Branchid);
+
+Alter table StaffTelephone
+Add constraint fk_StafftelephoneStaffId
+foreign key StaffTelephone(StaffId)
+references Staff(StaffiD);
+
+Alter table Branch
+Add constraint fk_branchmanagerId
+foreign key Branch(managerid)
+references Staff(staffid);
+
+Alter table ClientTelephone
+Add constraint fk_ClienttelephoneClientId
+foreign key clientTelephone(clientId)
+references client(clientid);
+
+
+Alter table Client
+Add constraint fk_clientRegisteredAtBranchId
+foreign key client(RegisteredAtBranchId)
+references branch(branchId);
+
+Alter table client
+add constraint fk_clientregisteredbyStaffId
+foreign key client(registeredbyStaffId)
+references staff(staffid);
+
+
+
 
 
 select * from clienttelephone;
